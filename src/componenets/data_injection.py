@@ -1,0 +1,57 @@
+import os
+import sys
+from src.exception import CustomException
+from src.logger import logging
+import pandas as pd
+
+from sklearn.model_selection import train_test_split
+from dataclasses import dataclass
+
+@dataclass
+class DataIngestionConfig:
+    train_data_path: str=os.path.join('artifact',"train.csv")
+    test_data_path: str=os.path.join('artifact',"test.csv")
+    raw_data_path: str=os.path.join('artifact',"raw.csv")
+
+class DataIngestion:
+    def __init__(self):
+        self.ingestion_config=DataIngestionConfig()
+
+    def initiate_data_ingestion(self):
+        logging.info("Entered the data injestion method or componenet")
+        try:
+            df=pd.read_csv("notebook\data\stud.csv")
+            logging.info("Read the dataset form the dataframe")
+
+            os.makedirs(os.path.dirname(self.ingestion_config.train_data_path),exist_ok=True)
+            '''
+            - If the artifact folder doesn’t exist yet, trying to save train.csv there would cause an error.
+            - So os.makedirs(...) ensures the directory exists before writing the file.
+            - exist_ok=True means: if the folder already exists, don’t throw an error — just continue.
+            In short:
+            We create the directory using train_data_path because the CSV files (train.csv, test.csv, raw.csv) need a place to be stored. Without making the folder first, saving them would fail.
+            👉 Think of it like making sure a drawer exists before putting files inside it.
+            Would you like me to also show you what happens if you don’t use os.makedirs and try to save directly?
+
+            '''
+
+            df.to_csv(self.ingestion_config.raw_data_path,index=False,header=True)
+
+            logging.info("Train test split initiated")
+            train_set,test_set=train_test_split(df,test_size=0.2,random_state=42)
+
+            train_set.to_csv(self.ingestion_config.train_data_path,index=False,header=True)
+            test_set.to_csv(self.ingestion_config.test_data_path,index=False,header=True)
+
+            logging.info("Ingestion of the data is completed")
+
+            return(
+                self.ingestion_config.train_data_path,
+                self.ingestion_config.test_data_path
+            )
+        except Exception as e:
+            raise CustomException(e,sys)
+        
+if __name__=="__main__":
+    obj=DataIngestion()
+    obj.initiate_data_ingestion()
