@@ -61,3 +61,21 @@ class CustomData:
 
         except Exception as e:
             raise CustomException(e,sys)
+        
+'''
+Predict_pipeline.py
+Purpose: Encapsulates ML prediction logic and input handling.
+🔹 PredictPipeline
+- Loads trained model (model.pkl) and preprocessor (preprocessor.pkl) using load_object.
+- Transforms input features with the preprocessor.
+- Runs model prediction.
+- Wraps errors in CustomException for debugging.
+👉 Role: Runs the actual ML prediction.
+🔹 CustomData
+- Represents one row of input data (from the form).
+- Stores values like gender, race_ethnicity, reading_score, etc.
+- Converts them into a pandas DataFrame (get_data_as_data_frame).
+- Initially used underscores in column names, but you renamed them later in app.py to match training dataset.
+👉 Role: Converts raw form inputs into a DataFrame for the pipeline
+
+'''

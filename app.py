@@ -50,3 +50,17 @@ def predict_datapoint():
 
 if __name__=="__main__":
     app.run(host="0.0.0.0",debug=True)
+'''
+This is the entry point of your project.
+- It creates a Flask app (application=Flask(__name__)).
+- Defines routes:
+- / → shows index.html.
+- /predictdata → handles both GET (show form) and POST (process form data).
+- When POST:
+- Collects form inputs into a CustomData object.
+- Converts them into a DataFrame (get_data_as_data_frame).
+- Renames columns to match training dataset.
+- Passes the DataFrame to PredictPipeline for prediction.
+- Renders home.html with the prediction result.
+👉 Purpose: This file connects your web frontend (HTML forms) with your ML pipeline.
+'''
